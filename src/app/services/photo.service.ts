@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource, GalleryPhotos, Photo } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Storage } from '@capacitor/storage';
@@ -14,7 +14,7 @@ export class PhotoService {
   public photos: UserPhoto[] = [];
   private PHOTO_STORAGE: string = 'photos';
 
-  constructor(private platform: Platform) {}
+  constructor(private platform: Platform) { }
 
   public async loadSaved() {
     // Retrieve cached photo array data
@@ -143,6 +143,15 @@ export class PhotoService {
       };
       reader.readAsDataURL(blob);
     });
+
+  public async loadImageFromGallery() {
+    const galleryImages: GalleryPhotos = await Camera.pickImages({
+      limit: 5,
+      presentationStyle: 'fullscreen',
+    });
+
+    console.log({ galleryImages });
+  }
 }
 
 export interface UserPhoto {
